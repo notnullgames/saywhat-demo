@@ -1,0 +1,82 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://people/emily/portrait.png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends CanvasLayer
+
+var dialog = Object()
+signal dialog_actioned
+
+# this deletes itself, so if it exists, it should control input
+func _ready():
+	Game.input = \"dialog\"
+	$Text.bbcode_text = dialog.dialogue
+	$Name.bbcode_text = \"[right]\" + dialog.character + \"[/right]\"
+	$Portrait.texture = load(\"res://people/\" + dialog.character.to_lower() + \"/portrait.png\")
+
+func _input(event):
+	if event.is_action_pressed(\"ui_accept\"):
+		if dialog.next_node_id:
+			emit_signal(\"dialog_actioned\", dialog.next_node_id)
+			queue_free()
+		else:
+			Game.input = \"game\"
+			queue_free()
+	if event.is_action_pressed(\"ui_cancel\"):
+		Game.input = \"game\"
+		queue_free()
+"
+
+[node name="DialogBalloon" type="CanvasLayer"]
+script = SubResource( 1 )
+
+[node name="Text" type="RichTextLabel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.996986
+anchor_right = 0.5
+anchor_bottom = 0.996986
+margin_left = -143.0
+margin_top = -77.2766
+margin_right = 144.0
+margin_bottom = -17.2766
+bbcode_enabled = true
+bbcode_text = "TEXT"
+text = "TEXT"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Name" type="RichTextLabel" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -140.5
+margin_top = -93.0
+margin_right = 140.5
+margin_bottom = -77.0
+bbcode_enabled = true
+bbcode_text = "[right]NAME[/right]"
+text = "NAME"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_top = 0.00104001
+anchor_bottom = 0.00104001
+margin_left = 8.7504
+margin_top = 144.0
+margin_right = 308.75
+margin_bottom = 228.0
+color = Color( 0, 0, 0, 0.364706 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Portrait" type="Sprite" parent="."]
+position = Vector2( 283.002, 121.397 )
+scale = Vector2( 0.556949, 0.556949 )
+texture = ExtResource( 1 )

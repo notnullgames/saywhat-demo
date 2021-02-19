@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+# this tracks who can listen to input
+var input = \"game\"
+
+# these are the people the player has met.
+var HasMetTom = false
+
+var DialogBalloon = preload(\"res://DialogBalloon.tscn\")
+
+func _ready():
+	DialogueManager.resource = preload(\"res://dialog.tres\")
+	DialogueManager.game_state = self
+
+func show_dialog(id: String) -> void:
+	var dialog = yield(DialogueManager.get_next_dialogue_line(id), \"completed\")
+	if dialog != null:
+		var balloon = DialogBalloon.instance()
+		balloon.dialog = dialog
+		add_child(balloon)
+		show_dialog(yield(balloon, \"dialog_actioned\"))
+"
+
+[node name="Game" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

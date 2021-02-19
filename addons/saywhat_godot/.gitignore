@@ -1,3 +1,6 @@
+# OS
+.DS_Store
+Thumbs.db
 
 # Godot-specific ignores
 .import/
@@ -7,5 +10,3 @@ export_presets.cfg
 # Mono-specific ignores
 .mono/
 data_*/
-
-.DS_Store
