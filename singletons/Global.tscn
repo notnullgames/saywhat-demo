@@ -5,13 +5,19 @@ script/source = "extends Control
 
 var current_scene = null
 
+# Have you met Tom? 
+var met_tom = false
+
+# Are the alrms going off?
+var alarms_on = false
+
 # Emily is the player
-onready var player = get_node(\"../\" + get_tree().get_current_scene().get_name() + \"/Emily\")
+# TODO: this is a little clunky as I need the exact path...
+onready var player = get_node(\"/root/Demo/YSort/Emily\")
 
 func _ready():
 	var root = get_tree().get_root()
 	current_scene = root.get_child(root.get_child_count() - 1)
-	print(player)
 
 # switch scenes
 func goto_scene(path):
@@ -29,7 +35,12 @@ func _deferred_goto_scene(path):
 	get_tree().set_current_scene(current_scene)
 
 func _input(event):
-	pass
+	if player:
+		var movement_vector = player.get_movement_vector()
+		movement_vector = Vector2.ZERO
+		movement_vector.x = Input.get_action_strength('ui_right') - Input.get_action_strength('ui_left')
+		movement_vector.y = Input.get_action_strength('ui_down') - Input.get_action_strength('ui_up')
+		player.set_movement_vector(movement_vector.normalized())
 "
 
 [node name="Global" type="Control"]
