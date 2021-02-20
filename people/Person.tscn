@@ -66,13 +66,13 @@ var touching
 func _on_Area2D_body_entered(body):
 	if body != self and body != Global.player:
 		touching = body
-		if funcref(body, \"on_touch\"):
+		if funcref(body, \"on_touch\").is_valid():
 			body.on_touch()
 
 func _on_Area2D_body_exited(body):
 	if body != self and body != Global.player:
 		touching = null
-		if funcref(body, \"on_untouch\"):
+		if funcref(body, \"on_untouch\").is_valid():
 			body.on_untouch()
 "
 

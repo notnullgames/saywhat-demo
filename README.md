@@ -2,6 +2,8 @@
 
 A demo Godot project to show how to use SayWhat
 
+You can see it running [here](https://saywhat-demo.surge.sh/).
+
 It shows how to use the [Godot library](https://github.com/nathanhoad/saywhat_godot).
 
 In order to make it from scratch:
