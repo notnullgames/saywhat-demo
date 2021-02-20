@@ -51,6 +51,21 @@ func _physics_process(delta):
 		animationState.travel('Idle')
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 	velocity = move_and_slide(velocity)
+
+
+# called when player presses ui_accept and is touching this thing
+func on_activate():
+	print(dialog_id)
+
+# these track the player touching this thing
+var touching
+func _on_Area2D_body_entered(body):
+	if body != self and body != Global.player:
+		touching = body
+
+func _on_Area2D_body_exited(body):
+	if body != self and body != Global.player:
+		touching = null
 "
 
 [sub_resource type="Animation" id=2]
@@ -181,60 +196,60 @@ tracks/0/keys = {
 "values": [ 9, 10, 11, 12, 13, 14, 15, 16 ]
 }
 
-[sub_resource type="CapsuleShape2D" id=10]
-
-[sub_resource type="AnimationNodeAnimation" id=11]
+[sub_resource type="AnimationNodeAnimation" id=10]
 animation = "Idle South"
 
-[sub_resource type="AnimationNodeAnimation" id=12]
+[sub_resource type="AnimationNodeAnimation" id=11]
 animation = "Idle North"
 
-[sub_resource type="AnimationNodeAnimation" id=13]
+[sub_resource type="AnimationNodeAnimation" id=12]
 animation = "Idle West"
 
-[sub_resource type="AnimationNodeAnimation" id=14]
+[sub_resource type="AnimationNodeAnimation" id=13]
 animation = "Idle East"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id=15]
-blend_point_0/node = SubResource( 11 )
+[sub_resource type="AnimationNodeBlendSpace2D" id=14]
+blend_point_0/node = SubResource( 10 )
 blend_point_0/pos = Vector2( 0, 1 )
-blend_point_1/node = SubResource( 12 )
+blend_point_1/node = SubResource( 11 )
 blend_point_1/pos = Vector2( 0, -1 )
-blend_point_2/node = SubResource( 13 )
+blend_point_2/node = SubResource( 12 )
 blend_point_2/pos = Vector2( -1, 0 )
-blend_point_3/node = SubResource( 14 )
+blend_point_3/node = SubResource( 13 )
 blend_point_3/pos = Vector2( 1, 0 )
 
-[sub_resource type="AnimationNodeAnimation" id=18]
+[sub_resource type="AnimationNodeAnimation" id=15]
 animation = "Walk South"
 
-[sub_resource type="AnimationNodeAnimation" id=19]
+[sub_resource type="AnimationNodeAnimation" id=16]
 animation = "Walk North"
 
-[sub_resource type="AnimationNodeAnimation" id=20]
+[sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Walk West"
 
-[sub_resource type="AnimationNodeAnimation" id=21]
+[sub_resource type="AnimationNodeAnimation" id=18]
 animation = "Walk East"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id=22]
-blend_point_0/node = SubResource( 18 )
+[sub_resource type="AnimationNodeBlendSpace2D" id=19]
+blend_point_0/node = SubResource( 15 )
 blend_point_0/pos = Vector2( 0, 0.9 )
-blend_point_1/node = SubResource( 19 )
+blend_point_1/node = SubResource( 16 )
 blend_point_1/pos = Vector2( 0, -0.9 )
-blend_point_2/node = SubResource( 20 )
+blend_point_2/node = SubResource( 17 )
 blend_point_2/pos = Vector2( -1, 0 )
-blend_point_3/node = SubResource( 21 )
+blend_point_3/node = SubResource( 18 )
 blend_point_3/pos = Vector2( 1, 0 )
 
-[sub_resource type="AnimationNodeStateMachine" id=16]
-states/Idle/node = SubResource( 15 )
+[sub_resource type="AnimationNodeStateMachine" id=20]
+states/Idle/node = SubResource( 14 )
 states/Idle/position = Vector2( 106, 74 )
-states/Walk/node = SubResource( 22 )
+states/Walk/node = SubResource( 19 )
 states/Walk/position = Vector2( 435, 79 )
 start_node = "Idle"
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=17]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=21]
+
+[sub_resource type="CapsuleShape2D" id=22]
 
 [node name="Person" type="KinematicBody2D"]
 script = SubResource( 1 )
@@ -256,14 +271,24 @@ frame = 27
 "anims/Walk South" = SubResource( 8 )
 "anims/Walk West" = SubResource( 9 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-rotation = -1.5708
-shape = SubResource( 10 )
-
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 16 )
+tree_root = SubResource( 20 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/playback = SubResource( 17 )
+parameters/playback = SubResource( 21 )
 parameters/Idle/blend_position = Vector2( -0.00103414, 0 )
 parameters/Walk/blend_position = Vector2( 0, 0 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+rotation = -1.5708
+shape = SubResource( 22 )
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( -3.31083, -20.6595 )
+rotation = -1.5708
+shape = SubResource( 22 )
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
