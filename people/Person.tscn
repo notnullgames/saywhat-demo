@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://people/emily/walk.png" type="Texture" id=1]
 
@@ -35,7 +35,7 @@ func get_movement_vector():
 
 func _ready():
 	# use instance-name to figure out what graphic to use
-	$Sprite.texture = load('res://people/' + character +  '/walk.png')
+	$Sprite.texture = load('res://people/%s/walk.png' % character)
 
 func _physics_process(delta):
 	if movement_vector != Vector2.ZERO:
@@ -259,6 +259,9 @@ start_node = "Idle"
 
 [sub_resource type="CapsuleShape2D" id=22]
 
+[sub_resource type="RectangleShape2D" id=23]
+extents = Vector2( 18.3406, 26.4391 )
+
 [node name="Person" type="KinematicBody2D"]
 script = SubResource( 1 )
 
@@ -287,16 +290,16 @@ parameters/playback = SubResource( 21 )
 parameters/Idle/blend_position = Vector2( -0.00103414, 0 )
 parameters/Walk/blend_position = Vector2( 0, 0 )
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D-physics" type="CollisionShape2D" parent="."]
 rotation = -1.5708
 shape = SubResource( 22 )
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 2
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( -3.31083, -20.6595 )
+[node name="CollisionShape2D-interact" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0.43917, 0.5905 )
 rotation = -1.5708
-shape = SubResource( 22 )
+shape = SubResource( 23 )
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

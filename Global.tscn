@@ -3,21 +3,20 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
 
-# Have you met Tom? 
-var met_tom = false
-
-# Are the alrms going off?
-var alarms_on = false
-
 var current_scene = null
 
 # Emily is the player
 # TODO: this is a little clunky as I need the exact path...
 onready var player = get_node(\"/root/Demo/YSort/Emily\")
 
+# give player input
+var player_move = true
+
 func _ready():
 	var root = get_tree().get_root()
 	current_scene = root.get_child(root.get_child_count() - 1)
+	DialogueManager.resource = preload(\"res://dialogs.tres\")
+	DialogueManager.game_state = self
 
 # switch scenes
 func goto_scene(path):
@@ -25,9 +24,12 @@ func goto_scene(path):
 
 # initiate a dialog
 func dialog(id: String):
-	print(\"dialog not yet implemented: %s\" % id)
+	var d = yield(DialogueManager.get_next_dialogue_line(id), \"completed\")
+	if d:
+		var balloon = load(\"res://Dialog.tscn\").instance()
+		balloon.dialog = d
+		add_child(balloon)
 	
-
 func _deferred_goto_scene(path):
 	current_scene.free()
 	var s = ResourceLoader.load(path)
@@ -36,7 +38,7 @@ func _deferred_goto_scene(path):
 	get_tree().set_current_scene(current_scene)
 
 func _input(event):
-	if player:
+	if player and player_move:
 		var movement_vector = player.get_movement_vector()
 		movement_vector = Vector2.ZERO
 		movement_vector.x = Input.get_action_strength('ui_right') - Input.get_action_strength('ui_left')
