@@ -10,6 +10,6 @@ In order to make it from scratch:
 - Enable `SayWhat` in project plugins.
 - Add assets to project
 - Made a basic player-movement setup 
-- Add a `Global` singleton to hold the global game-state. THis is the scene taht dialogs have access too, as well.
+- Add a `Global` singleton to hold the global game-state. This is the scene that dialogs have access to, as well.
 - Create `Dialog` scene to actually show the dialog.
 - Make maps (like levels/Demo)
