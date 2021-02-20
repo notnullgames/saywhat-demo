@@ -3,13 +3,13 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
 
-var current_scene = null
-
 # Have you met Tom? 
 var met_tom = false
 
 # Are the alrms going off?
 var alarms_on = false
+
+var current_scene = null
 
 # Emily is the player
 # TODO: this is a little clunky as I need the exact path...
@@ -25,7 +25,8 @@ func goto_scene(path):
 
 # initiate a dialog
 func dialog(id: String):
-	pass
+	print(\"dialog not yet implemented: %s\" % id)
+	
 
 func _deferred_goto_scene(path):
 	current_scene.free()

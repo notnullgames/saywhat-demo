@@ -36,10 +36,6 @@ func get_movement_vector():
 func _ready():
 	# use instance-name to figure out what graphic to use
 	$Sprite.texture = load('res://people/' + character +  '/walk.png')
-	if Global.player == self:
-		print(\"I (%s) am player.\" % (character))
-	else:
-		print(\"I (%s) am not player.\" % (character))
 
 func _physics_process(delta):
 	if movement_vector != Vector2.ZERO:
@@ -55,17 +51,29 @@ func _physics_process(delta):
 
 # called when player presses ui_accept and is touching this thing
 func on_activate():
-	print(dialog_id)
+	Global.dialog(dialog_id)
+
+# called when the player touches this thing
+func on_touch():
+	pass
+
+# called when the player untouches this thing
+func on_untouch():
+	pass
 
 # these track the player touching this thing
 var touching
 func _on_Area2D_body_entered(body):
 	if body != self and body != Global.player:
 		touching = body
+		if funcref(body, \"on_touch\"):
+			body.on_touch()
 
 func _on_Area2D_body_exited(body):
 	if body != self and body != Global.player:
 		touching = null
+		if funcref(body, \"on_untouch\"):
+			body.on_untouch()
 "
 
 [sub_resource type="Animation" id=2]
