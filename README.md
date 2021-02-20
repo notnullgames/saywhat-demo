@@ -13,4 +13,5 @@ In order to make it from scratch:
 - Made a basic player-movement setup 
 - Add a `Global` singleton to hold the global game-state. This is the scene that dialogs have access to, as well.
 - Create `Dialog` scene to actually show the dialog.
-- Make maps (like levels/Demo)
+- Create dialogs in SayWhat with entry-points for characters.
+- Make maps (like levels/Demo) Name characters, and set their dialog entry-point IDs 
