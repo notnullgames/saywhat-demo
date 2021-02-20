@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+var current_scene = null
+
+# Emily is the player
+onready var player = get_node(\"../\" + get_tree().get_current_scene().get_name() + \"/Emily\")
+
+func _ready():
+	var root = get_tree().get_root()
+	current_scene = root.get_child(root.get_child_count() - 1)
+	print(player)
+
+# switch scenes
+func goto_scene(path):
+	call_deferred(\"_deferred_goto_scene\", path)
+
+# initiate a dialog
+func dialog(id: String):
+	pass
+
+func _deferred_goto_scene(path):
+	current_scene.free()
+	var s = ResourceLoader.load(path)
+	current_scene = s.instance()
+	get_tree().get_root().add_child(current_scene)
+	get_tree().set_current_scene(current_scene)
+
+func _input(event):
+	pass
+"
+
+[node name="Global" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
